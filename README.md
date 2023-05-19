@@ -1,7 +1,10 @@
 # Route List
 
-GET|HEAD / ─────────────────────────────────────────────────────── Closure
-POST /api/generate/:id ─────────────────────────────────────── IndexController.index
+1. run this command in root folder
+
+   ```
+   node ace list:routes
+   ```
 
 # Deploy Guide
 
