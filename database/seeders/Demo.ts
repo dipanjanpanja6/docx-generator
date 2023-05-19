@@ -13,7 +13,7 @@ export default class extends BaseSeeder {
       pin: "721136",
       city: "paschim medinipur",
       state: "wb",
-      image: "http://127.0.0.1:3333/test.jpg",
+      image: "http://127.0.0.1:57585/uploads/test.jpg",
       date: "09-08-9090",
       title: "this is a demo title",
       name: "Geogo Name",
