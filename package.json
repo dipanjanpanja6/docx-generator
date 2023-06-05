@@ -27,8 +27,11 @@
     "axios": "^1.4.0",
     "carbone": "^3.5.5",
     "docximager": "^0.0.4",
+    "docxtemplater": "^3.37.9",
+    "docxtemplater-image-module-free": "^1.1.1",
     "luxon": "^3.3.0",
     "pg": "^8.11.0",
+    "pizzip": "^3.1.4",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21"
