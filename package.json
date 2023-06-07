@@ -29,6 +29,7 @@
     "docximager": "^0.0.4",
     "docxtemplater": "^3.37.9",
     "docxtemplater-image-module-free": "^1.1.1",
+    "image-size": "^1.0.2",
     "luxon": "^3.3.0",
     "pg": "^8.11.0",
     "pizzip": "^3.1.4",
