@@ -62,10 +62,7 @@ export default async function ResolveImage(
   for (const p of images?.data?.insured_photos) {
     insured_photos.push({ url: p.url });
   }
-  var id_proofs: any[] = [];
-  for (const p of images?.data?.id_proofs) {
-    id_proofs.push({ url: p.url });
-  }
+  const id_proofs = images?.data?.id_proofs.map(({ url }) => ({ url }));
 
   return { id_proofs, insured_photos, cif_inputs };
 }

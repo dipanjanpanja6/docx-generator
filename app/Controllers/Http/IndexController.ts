@@ -7,7 +7,7 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import ImageModule from "docxtemplater-image-module-free";
 import opts, { networkToBuffer } from "App/Services/DocxImager";
-import ResolveImage, { getTemplate } from "App/Services/RailsImage";
+import ResolveImage from "App/Services/RailsImage";
 
 export default class IndexController {
   public async index({ response, request }: HttpContextContract) {
