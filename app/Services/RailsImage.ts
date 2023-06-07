@@ -4,13 +4,13 @@ import axios from "axios";
 
 const load_images = async (
   case_cif_form_id: number,
-  case_form_input_id: number,
+  case_form_input_id: number
 ) => {
   try {
     const fetch_url = `${Env.get(
       "API_HOST"
     )}/api/case_cif_forms/${case_cif_form_id}/case_form_inputs/${case_form_input_id}/get_input`;
-   
+
     var { data } = await axios.get(fetch_url);
     return data;
   } catch (error) {
@@ -54,8 +54,28 @@ export default async function ResolveImage(
     }
   });
 
-  const insured_photos = images?.data?.insured_photos.map(({ url }) => ({ url }));
+  const insured_photos = images?.data?.insured_photos.map(({ url }) => ({
+    url,
+  }));
   const id_proofs = images?.data?.id_proofs.map(({ url }) => ({ url }));
+  const house_photos = images?.data?.house_photos.map(({ url }) => ({ url }));
+  const fe_selfies = images?.data?.fe_selfies.map(({ url }) => ({ url }));
+  const landmark_photos = images?.data?.landmark_photos.map(({ url }) => ({
+    url,
+  }));
+  const evidence_photos = images?.data?.evidence_photos.map(({ url }) => ({
+    url,
+  }));
+  const signature = [{ url: images?.data?.signature?.url }];
 
-  return { id_proofs, insured_photos, cif_inputs };
+  return {
+    id_proofs,
+    insured_photos,
+    house_photos,
+    fe_selfies,
+    landmark_photos,
+    evidence_photos,
+    signature,
+    cif_inputs,
+  };
 }
