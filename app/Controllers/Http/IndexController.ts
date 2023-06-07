@@ -6,14 +6,27 @@ import axios from "axios";
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import ImageModule from "docxtemplater-image-module-free";
-import opts from "App/Services/DocxImager";
-import ResolveImage from "App/Services/RailsImage";
+import opts, { networkToBuffer } from "App/Services/DocxImager";
+import ResolveImage, { getTemplate } from "App/Services/RailsImage";
 
 export default class IndexController {
   public async index({ response, request }: HttpContextContract) {
-    const resultFile = Application.publicPath(`uploads/result.docx`);
-    const templateFile = Application.publicPath("uploads/image_docx_1.docx");
-    const content = fs.readFileSync(templateFile, "binary");
+    const case_cif_form_id = request.param("id");
+    const { case_form_input_id, token, agent_id, template } =
+      await request.validate({
+        schema: schema.create({
+          case_form_input_id: schema.number(),
+          token: schema.string(),
+          agent_id: schema.number(),
+          // template: schema.file(),
+          template: schema.string(),
+        }),
+      });
+    // const resultFile = Application.publicPath(`uploads/result.docx`);
+    // const templateFile = Application.publicPath("uploads/image_docx_1.docx");
+    const content = await networkToBuffer(template);
+
+    // const content = fs.readFileSync(template.tmpPath!, "binary");
     const zip = new PizZip(content);
     const imageModule = new ImageModule(opts);
     const doc = new Docxtemplater(zip, {
@@ -21,14 +34,6 @@ export default class IndexController {
       linebreaks: true,
       modules: [imageModule],
     });
-    // const case_cif_form_id = request.param("id");
-    // const { case_form_input_id, token, agent_id } = await request.validate({
-    //   schema: schema.create({
-    //     case_form_input_id: schema.number(),
-    //     token: schema.string(),
-    //     agent_id: schema.number(),
-    //   }),
-    // });
 
     // const data = await ResolveImage(
     //   case_cif_form_id,
@@ -66,7 +71,8 @@ export default class IndexController {
           url: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
         },
         {
-          url: "https://crm.foxivision.net/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBb000IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--baffae70af7cf379f440f4531c22a6c90d7f5655/insured_photos",
+          url: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
+          // url: "https://crm.foxivision.net/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBb000IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--baffae70af7cf379f440f4531c22a6c90d7f5655/insured_photos",
         },
       ],
     });
@@ -78,9 +84,12 @@ export default class IndexController {
       compression: "DEFLATE",
     });
 
-    fs.writeFileSync(resultFile, buffer);
-    response.attachment(resultFile);
-
-    return "ok";
+    // fs.writeFileSync(resultFile, buffer);
+    // response.attachment(resultFile);
+    response.header(
+      "content-type",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    );
+    return response.send(buffer);
   }
 }

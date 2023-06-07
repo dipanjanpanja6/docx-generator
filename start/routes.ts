@@ -27,5 +27,5 @@ Route.get("/", async ({ response }) => {
 });
 
 Route.group(() => {
-  Route.get("generate/:id", "IndexController.index");
+  Route.post("generate/:id", "IndexController.index");
 }).prefix("api");
