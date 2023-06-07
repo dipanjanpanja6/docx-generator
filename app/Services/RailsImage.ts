@@ -1,7 +1,28 @@
 import Database from "@ioc:Adonis/Lucid/Database";
+import Env from "@ioc:Adonis/Core/Env";
+import axios from "axios";
 
+const load_images = async (
+  case_cif_form_id: number,
+  case_form_input_id: number,
+  token: string
+) => {
+  try {
+    const fetch_url = `${Env.get(
+      "API_HOST"
+    )}/api/case_cif_forms/${case_cif_form_id}/case_form_inputs/${case_form_input_id}`;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    var { data } = await axios.get(fetch_url, { headers });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default async function ResolveImage(
-  case_cif_form_id: string,
+  case_cif_form_id: number,
   case_form_input_id: number,
   token: string,
   agent_id: number
@@ -22,11 +43,7 @@ export default async function ResolveImage(
   const cif_form_field_templates = await Database.query()
     .from("cif_form_field_templates")
     .where("cif_form_template_id", "=", cif_form_template.id);
-  var images = await this.load_images(
-    case_cif_form_id,
-    case_form_input_id,
-    token
-  );
+  var images = await load_images(case_cif_form_id, case_form_input_id, token);
   let cif_inputs: any[] = [];
   cif_form_field_templates.map((t) => {
     if (t.field_type === 7 && t.field_meta && t.field_meta.select_inputs) {
