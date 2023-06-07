@@ -38,6 +38,7 @@ async function networkToBuffer(url) {
     // });
 
     // const base64 = Buffer.from(res.data, "base64");
+    console.log(data);
 
     return data;
   } catch (error) {
@@ -53,28 +54,19 @@ opts.getImage = async function (tagValue, tagName) {
   //tagName is 'image'
   // return fs.readFileSync(tagValue);
   // return base64DataURLToArrayBuffer(tagValue);
-  // return await networkToBuffer(tagValue);
+  return networkToBuffer(tagValue);
   // return tagValue;
   console.log(tagValue, tagName);
   // tagValue is "https://docxtemplater.com/xt-pro-white.png" and tagName is "image"
-  return new Promise(function (resolve, reject) {
-    getHttpData(tagValue, function (err, data) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(data);
-    });
-  });
+  // return new Promise(function (resolve, reject) {
+  //   getHttpData(tagValue, function (err, data) {
+  //     if (err) {
+  //       return reject(err);
+  //     }
+  //     resolve(data);
+  //   });
+  // });
 };
-
-//Pass the function that return image size
-// opts.getSize = function (img, tagValue, tagName) {
-//   //img is the image returned by opts.getImage()
-//   //tagValue is 'examples/image.png'
-//   //tagName is 'image'
-//   //tip: you can use node module 'image-size' here
-//   return [150, 150];
-// };
 
 opts.getSize = function (img, tagValue, tagName) {
   console.log("getSize=>", tagValue, tagName);
@@ -112,6 +104,8 @@ function getHttpData(url, callback) {
         callback(null, data.read());
       });
       response.on("error", function (e) {
+        console.log(e);
+
         callback(e);
       });
     })

@@ -12,7 +12,7 @@ import ResolveImage from "App/Services/RailsImage";
 export default class IndexController {
   public async index({ response, request }: HttpContextContract) {
     const resultFile = Application.publicPath(`uploads/result.docx`);
-    const templateFile = Application.publicPath("uploads/image_docx.docx");
+    const templateFile = Application.publicPath("uploads/image_docx_1.docx");
     const content = fs.readFileSync(templateFile, "binary");
     const zip = new PizZip(content);
     const imageModule = new ImageModule(opts);
@@ -55,19 +55,18 @@ export default class IndexController {
     //   ],
     // });
     await doc.resolveData({
-      first_name: "ok",
-      last_name: "ok2",
-      description: "se",
-      phone: "34",
-      images: [
+      cif_inputs: [{ label: "qed", value: "ed" }],
+      insured_photos: [
         {
-          src: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
+          url: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
+        },
+      ],
+      id_proofs: [
+        {
+          url: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
         },
         {
-          src: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
-        },
-        {
-          src: "https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png",
+          url: "https://crm.foxivision.net/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBb000IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--baffae70af7cf379f440f4531c22a6c90d7f5655/insured_photos",
         },
       ],
     });
