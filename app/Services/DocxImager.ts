@@ -27,7 +27,7 @@ function base64DataURLToArrayBuffer(dataURL) {
   return bytes.buffer;
 }
 
-async function networkToBuffer(url) {
+export async function networkToBuffer(url) {
   try {
     const { data } = await axios.get(url, { responseType: "arraybuffer" });
     // console.log("url", url);
