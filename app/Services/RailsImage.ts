@@ -5,17 +5,13 @@ import axios from "axios";
 const load_images = async (
   case_cif_form_id: number,
   case_form_input_id: number,
-  token: string
 ) => {
   try {
     const fetch_url = `${Env.get(
       "API_HOST"
-    )}/api/case_cif_forms/${case_cif_form_id}/case_form_inputs/${case_form_input_id}`;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
-    var { data } = await axios.get(fetch_url, { headers });
+    )}/api/case_cif_forms/${case_cif_form_id}/case_form_inputs/${case_form_input_id}/get_input`;
+   
+    var { data } = await axios.get(fetch_url);
     return data;
   } catch (error) {
     console.log(error);
@@ -24,7 +20,6 @@ const load_images = async (
 export default async function ResolveImage(
   case_cif_form_id: number,
   case_form_input_id: number,
-  token: string,
   agent_id: number
 ) {
   const case_cif_form = await Database.query()
@@ -43,7 +38,7 @@ export default async function ResolveImage(
   const cif_form_field_templates = await Database.query()
     .from("cif_form_field_templates")
     .where("cif_form_template_id", "=", cif_form_template.id);
-  var images = await load_images(case_cif_form_id, case_form_input_id, token);
+  var images = await load_images(case_cif_form_id, case_form_input_id);
   let cif_inputs: any[] = [];
   cif_form_field_templates.map((t) => {
     if (t.field_type === 7 && t.field_meta && t.field_meta.select_inputs) {
@@ -58,14 +53,9 @@ export default async function ResolveImage(
       });
     }
   });
-  var insured_photos: any[] = [];
-  for (const p of images?.data?.insured_photos) {
-    insured_photos.push({ url: p.url });
-  }
-  var id_proofs: any[] = [];
-  for (const p of images?.data?.id_proofs) {
-    id_proofs.push({ url: p.url });
-  }
+
+  const insured_photos = images?.data?.insured_photos.map(({ url }) => ({ url }));
+  const id_proofs = images?.data?.id_proofs.map(({ url }) => ({ url }));
 
   return { id_proofs, insured_photos, cif_inputs };
 }

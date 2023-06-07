@@ -9,11 +9,10 @@ import ResolveImage from "App/Services/RailsImage";
 export default class IndexController {
   public async index({ response, request }: HttpContextContract) {
     const case_cif_form_id = request.param("id");
-    const { case_form_input_id, token, agent_id, template_url } =
+    const { case_form_input_id, agent_id, template_url } =
       await request.validate({
         schema: schema.create({
           case_form_input_id: schema.number(),
-          token: schema.string(),
           agent_id: schema.number(),
           template_url: schema.string(),
         }),
@@ -32,7 +31,6 @@ export default class IndexController {
     const data = await ResolveImage(
       case_cif_form_id,
       case_form_input_id,
-      token,
       agent_id
     );
 
