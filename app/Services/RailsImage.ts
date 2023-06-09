@@ -26,6 +26,10 @@ export default async function ResolveImage(
     .from("case_cif_forms")
     .where({ id: case_cif_form_id })
     .firstOrFail();
+  const project = await Database.query()
+    .from("cases")
+    .where({ id: case_cif_form.case_id })
+    .firstOrFail();
   const case_form_input = await Database.query()
     .from("case_form_inputs")
     .where("case_cif_form_id", "=", case_cif_form.id)
@@ -67,6 +71,7 @@ export default async function ResolveImage(
     url,
   }));
   const signature = [{ url: images?.data?.signature?.url }];
+  const summary = project?.summary;
 
   return {
     id_proofs,
@@ -77,5 +82,6 @@ export default async function ResolveImage(
     evidence_photos,
     signature,
     cif_inputs,
+    summary
   };
 }
