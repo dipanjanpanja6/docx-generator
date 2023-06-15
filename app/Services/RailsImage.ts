@@ -71,7 +71,7 @@ export default async function ResolveImage(
     url,
   }));
   const signature = [{ url: images?.data?.signature?.url }];
-  const summary = project?.summary;
+  const summary = project?.summary || "";
 
   return {
     id_proofs,
