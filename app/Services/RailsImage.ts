@@ -82,6 +82,7 @@ export default async function ResolveImage(
     evidence_photos,
     signature,
     cif_inputs,
-    summary
+    summary,
+    page_break: `<w:p><w:br w:type="page" /></w:p>`
   };
 }
