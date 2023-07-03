@@ -30,13 +30,13 @@ opts.getSize = function (img, tagValue, tagName) {
   const sizeOf = require("image-size");
   const sizeObj = sizeOf(img);
   // console.log(sizeObj);
-  const forceWidth = 600;
-  const ratio = forceWidth / sizeObj.width;
+  const forceHeight = 800;
+  const ratio = forceHeight / sizeObj.height;
 
   return [
-    forceWidth,
+    Math.round(sizeObj.width * ratio),
+    forceHeight,
     // calculate height taking into account aspect ratio
-    Math.round(sizeObj.height * ratio),
   ];
 };
 
