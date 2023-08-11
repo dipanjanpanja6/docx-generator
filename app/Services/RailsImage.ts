@@ -92,8 +92,8 @@ export default async function ResolveImage(
   const signature = [{ url: images?.data?.signature?.url }];
   const summary = project?.summary || "";
 
-  const { case_number, case_type, created_at } = project || {};
-  const { name, phone, address, city } = customer || {};
+  const { policy, case_type, created_at, customer_address } = project || {};
+  const { name, phone, city } = customer || {};
   const { state } = customer_post || {};
 
   return {
@@ -106,10 +106,10 @@ export default async function ResolveImage(
     signature,
     cif_inputs,
     summary,
-    app_no: case_number || "",
+    app_no: policy || "",
     customer_name: name || "",
     customer_phone: phone || "",
-    customer_address: address || "",
+    customer_address: customer_address || "",
     customer_city: city || "",
     customer_state: state || "",
     case_visit_type:
