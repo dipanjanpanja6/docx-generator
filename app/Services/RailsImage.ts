@@ -68,7 +68,14 @@ export default async function ResolveImage(
       var obj = t.field_meta.select_inputs.find(
         (ip: any) => ip.value == case_form_input.data[t.field_code]
       );
-      cif_inputs.push({ label: `${t.field_label}`, value: obj.label });
+      if (obj) {
+        cif_inputs.push({ label: `${t.field_label}`, value: obj.label });
+      } else {
+        cif_inputs.push({
+          label: `${t.field_label}`,
+          value: case_form_input.data[t.field_code],
+        });
+      }
     } else {
       cif_inputs.push({
         label: `${t.field_label}`,
