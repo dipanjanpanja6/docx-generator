@@ -56,6 +56,19 @@ export default async function ResolveImage(
     .where("loggable_type", "=", "Case")
     .where("loggable_id", "=", project.id)
     .where("event_type", "=", "stage_change");
+  const client = project.client_id
+    ? await Database.query()
+        .from("clients")
+        .where("id", "=", project.client_id)
+        .firstOrFail()
+    : null;
+  const vendor = project.vendor_id
+    ? await Database.query()
+        .from("vendors")
+        .where("id", "=", project.vendor_id)
+        .firstOrFail()
+    : null;
+
 
   const report_sent = report_sent_activities.filter(
     (log) => log.event_data.to_stage === "report_submitted"
@@ -84,37 +97,46 @@ export default async function ResolveImage(
     }
   });
 
-  const insured_photos = images?.data?.insured_photos.map(({ url }) => ({
+  const media_photos = images?.data?.photos.map(({ url, media_title }) => ({
     url,
+    media_title,
   }));
-  const id_proofs = images?.data?.id_proofs.map(({ url }) => ({ url }));
-  const house_photos = images?.data?.house_photos.map(({ url }) => ({ url }));
-  const fe_selfies = images?.data?.fe_selfies.map(({ url }) => ({ url }));
-  const landmark_photos = images?.data?.landmark_photos.map(({ url }) => ({
-    url,
-  }));
-  const evidence_photos = images?.data?.evidence_photos.map(({ url }) => ({
-    url,
-  }));
-  const signature = [{ url: images?.data?.signature?.url }];
+
+  // const insured_photos = images?.data?.insured_photos.map(({ url }) => ({
+  //   url,
+  // }));
+  // const id_proofs = images?.data?.id_proofs.map(({ url }) => ({ url }));
+  // const house_photos = images?.data?.house_photos.map(({ url }) => ({ url }));
+  // const fe_selfies = images?.data?.fe_selfies.map(({ url }) => ({ url }));
+  // const landmark_photos = images?.data?.landmark_photos.map(({ url }) => ({
+  //   url,
+  // }));
+  // const evidence_photos = images?.data?.evidence_photos.map(({ url }) => ({
+  //   url,
+  // }));
+  // const signature = [{ url: images?.data?.signature?.url }];
   const summary = project?.summary || "";
 
-  const { policy, case_type, created_at, customer_address } = project || {};
-  const { name, phone, city } = customer || {};
+  const { policy, case_type, created_at, customer_address, customer_name } =
+    project || {};
+  const { phone, city } = customer || {};
   const { state } = customer_post || {};
 
   return {
-    id_proofs,
-    insured_photos,
-    house_photos,
-    fe_selfies,
-    landmark_photos,
-    evidence_photos,
-    signature,
+    // id_proofs,
+    // insured_photos,
+    // house_photos,
+    // fe_selfies,
+    // landmark_photos,
+    // evidence_photos,
+    // signature,
+    media_photos,
     cif_inputs,
     summary,
+    client_name: client?.name || "",
+    vendor_name: vendor?.name || "",
     app_no: policy || "",
-    customer_name: name || "",
+    customer_name: customer_name || "",
     customer_phone: phone || "",
     customer_address: customer_address || "",
     customer_city: city || "",
